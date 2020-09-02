@@ -20,8 +20,32 @@ jobs:
       - name: Build
         run: mvn install
 
-      - name: Upload
+      - name: Upload AutoReferee.jar
         uses: actions/upload-artifact@v2
         with:
           name: AutoReferee.jar
           path: target/AutoReferee.jar
+
+      - name: Upload server.properties
+        uses: actions/upload-artifact@v2
+        with:
+          name: server.properties
+          path: server/server.properties
+
+      - name: Upload bukkit.yml
+        uses: actions/upload-artifact@v2
+        with:
+          name: bukkit.yml
+          path: server/bukkit.yml
+
+      - name: Upload spigot.yml
+        uses: actions/upload-artifact@v2
+        with:
+          name: spigot.yml
+          path: server/spigot.yml
+
+      - name: Upload paper.yml
+        uses: actions/upload-artifact@v2
+        with:
+          name: paper.yml
+          path: server/paper.yml
