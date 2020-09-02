@@ -17,7 +17,15 @@ mkdir plugins
 curl https://github.com/AutoReferee/AutoReferee/releases/latest/download/AutoReferee.jar -Lo plugins/AutoReferee.jar
 ```
 
-4. Run the server
+4. Install the default config files.
+```bash
+curl https://github.com/AutoReferee/AutoReferee/releases/latest/download/server.properties -Lo server.properties
+curl https://github.com/AutoReferee/AutoReferee/releases/latest/download/bukkit.yml -Lo bukkit.yml
+curl https://github.com/AutoReferee/AutoReferee/releases/latest/download/spigot.yml -Lo spigot.yml
+curl https://github.com/AutoReferee/AutoReferee/releases/latest/download/paper.yml -Lo paper.yml
+```
+
+5. Run the server
 ```bash
 java -jar paper.jar nogui
 ```
