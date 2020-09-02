@@ -1,0 +1,8 @@
+settings:
+  allow-end: false
+  connection-throttle: -1
+  world-container: './worlds'
+chunk-gc:
+  period-in-ticks: 0
+ticks-per:
+  autosave: 999999

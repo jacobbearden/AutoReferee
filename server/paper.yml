@@ -1,0 +1,8 @@
+world-settings:
+  default:
+    verbose: false
+    remove-invalid-mob-spawner-tile-entities: true
+    cache-chunk-maps: true
+    allow-block-location-tab-completion: false
+    use-async-lighting: true
+    optimize-explosions: true

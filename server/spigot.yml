@@ -1,0 +1,19 @@
+settings:
+  save-user-cache-on-stop-only: true
+  restart-on-crash: false
+  late-bind: true
+  player-shuffle: 1200
+stats:
+  disable-saving: true
+  forced-stats:
+    achievement:
+      openInventory: 1
+world-settings:
+  default:
+    verbose: false
+    entity-tracking-range:
+      players: 128
+    anti-xray:
+      enabled: false
+    chunks-per-tick: 1
+    clear-tick-list: true
