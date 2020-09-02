@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.aefonix.autoreferee</groupId>
+  <groupId>run.wool.autoreferee</groupId>
   <artifactId>AutoReferee</artifactId>
   <version>3.0.0</version>
   <name>AutoReferee</name>
@@ -13,9 +13,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spigot.version>1.8.8-R0.1-SNAPSHOT</spigot.version>
+    <minecraft.version>1.8.8-R0.1-SNAPSHOT</minecraft.version>
     <java.target.version>1.8</java.target.version>
-    <buildDirectory>${project.basedir}/target</buildDirectory>
   </properties>
 
   <scm>
@@ -29,8 +28,23 @@
 
   <repositories>
     <repository>
-      <id>spigot-repo</id>
-      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+      <id>papermc</id>
+      <url>https://papermc.io/repo/repository/maven-public/</url>
+    </repository>
+
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+
+    <repository>
+      <id>ashcon.app</id>
+      <url>https://repo.ashcon.app/nexus/content/repositories/snapshots/</url>
+    </repository>
+
+    <repository>
+      <id>jgit-repository</id>
+      <url>https://repo.eclipse.org/content/groups/releases/</url>
     </repository>
 
     <repository>
@@ -40,11 +54,11 @@
   </repositories>
 
   <dependencies>
-    <!-- Spigot API -->
+    <!-- Paper API -->
     <dependency>
-      <groupId>org.spigotmc</groupId>
-      <artifactId>spigot-api</artifactId>
-      <version>${spigot.version}</version>
+      <groupId>org.github.paperspigot</groupId>
+      <artifactId>paperspigot-api</artifactId>
+      <version>${minecraft.version}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -56,16 +70,63 @@
       <scope>compile</scope>
     </dependency>
 
+    <!-- Command Parsing -->
+    <dependency>
+      <groupId>app.ashcon.intake</groupId>
+      <artifactId>intake-bukkit</artifactId>
+      <version>v1.2.1</version>
+    </dependency>
+
+    <!-- Text Library -->
+    <dependency>
+      <groupId>net.kyori</groupId>
+      <artifactId>text-api</artifactId>
+      <version>3.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>net.kyori</groupId>
+      <artifactId>text-serializer-plain</artifactId>
+      <version>3.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>net.kyori</groupId>
+      <artifactId>text-serializer-legacy</artifactId>
+      <version>3.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>net.kyori</groupId>
+      <artifactId>text-serializer-gson</artifactId>
+      <version>3.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>net.kyori</groupId>
+      <artifactId>text-adapter-bukkit</artifactId>
+      <version>3.0.5</version>
+    </dependency>
+
+    <!-- JGit -->
+    <dependency>
+      <groupId>org.eclipse.jgit</groupId>
+      <artifactId>org.eclipse.jgit</artifactId>
+      <version>5.8.1.202007141445-r</version>
+    </dependency>
+
     <!-- WorldEdit -->
     <dependency>
       <groupId>com.sk89q.worldedit</groupId>
       <artifactId>worldedit-bukkit</artifactId>
       <version>6.1.5</version>
+      <optional>true</optional>
     </dependency>
+      <dependency>
+          <groupId>org.jetbrains</groupId>
+          <artifactId>annotations</artifactId>
+          <version>RELEASE</version>
+          <scope>compile</scope>
+      </dependency>
   </dependencies>
 
   <build>
-    <directory>${buildDirectory}</directory>
     <finalName>${project.artifactId}-${project.version}-${git.commit.id.abbrev}</finalName>
 
     <resources>
@@ -76,12 +137,6 @@
     </resources>
 
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
-      </plugin>
-
       <plugin>
         <groupId>pl.project13.maven</groupId>
         <artifactId>git-commit-id-plugin</artifactId>
@@ -97,6 +152,94 @@
           <failOnNoGitDirectory>false</failOnNoGitDirectory>
           <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+          <configuration>
+              <source>8</source>
+              <target>8</target>
+          </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.4</version>
+        <configuration>
+          <createDependencyReducedPom>false</createDependencyReducedPom>
+          <minimizeJar>true</minimizeJar>
+          <artifactSet>
+            <includes>
+              <include>run.wool.autoreferee:*:*</include>
+              <include>org.jdom:jdom2:*</include>
+              <include>app.ashcon.intake:intake-*:*</include>
+              <include>net.kyori:text-*:*</include>
+              <include>org.eclipse.jgit:org.eclipse.jgit:*</include>
+              <include>com.sk89q.worldedit:*:*</include>
+            </includes>
+          </artifactSet>
+          <filters>
+            <filter>
+              <artifact>*:*</artifact>
+              <excludes>
+                <exclude>META-INF/**</exclude>
+              </excludes>
+            </filter>
+          </filters>
+          <relocations combine.children="append">
+            <relocation>
+              <pattern>org.jdom2</pattern>
+              <shadedPattern>run.wool.autoreferee.lib.org.jdom2</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>app.ashcon.intake</pattern>
+              <shadedPattern>run.wool.autoreferee.lib.app.ashcon.intake</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>net.kyori</pattern>
+              <shadedPattern>run.wool.autoreferee.lib.net.kyori</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>org.eclipse.jgit</pattern>
+              <shadedPattern>run.wool.autoreferee.lib.org.eclipse.jgit</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>com.sk89q.worldedit</pattern>
+              <shadedPattern>run.wool.autoreferee.lib.com.sk89q.worldedit</shadedPattern>
+            </relocation>
+          </relocations>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.8</version>
+        <executions>
+          <execution>
+            <id>jar</id>
+            <phase>package</phase>
+            <configuration>
+              <target>
+                <copy file="${basedir}/target/${project.build.finalName}.jar"
+                      tofile="${basedir}/target/${project.artifactId}.jar"/>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
